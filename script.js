@@ -6,6 +6,7 @@ let currentDate = new Date();
 
 // DOM Elements
 let liveTime, liveDate, dayOfWeek, diaryTextarea, saveBtn, prevDayBtn, nextDayBtn, currentDaySpan, historyBtn, pandaImage;
+let currentMood, moodEmoji, emojiGrid;
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', function() {
@@ -22,6 +23,8 @@ function initializeApp() {
     setupLiveClock();
     setupDiary();
     updateCurrentDay();
+    setupMoodSelector();
+    updateMoodDisplay();
     
     // Show welcome message
     setTimeout(() => {
@@ -45,6 +48,11 @@ function initializeDOMElements() {
     currentDaySpan = document.getElementById('currentDay');
     historyBtn = document.getElementById('historyBtn');
     pandaImage = document.querySelector('.panda-image');
+    
+    // Mood elements
+    currentMood = document.getElementById('currentMood');
+    moodEmoji = document.getElementById('moodEmoji');
+    emojiGrid = document.getElementById('emojiGrid');
     
     console.log('DOM Elements initialized');
 }
@@ -111,6 +119,18 @@ function setupDiary() {
     }, 2000); // 2 second debounce
     
     diaryTextarea.addEventListener('input', debouncedAutoSave);
+    
+    // Mood selector setup
+    if (emojiGrid) {
+        const emojiButtons = emojiGrid.querySelectorAll('.emoji-btn');
+        emojiButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mood = btn.dataset.mood;
+                const emoji = btn.dataset.emoji;
+                selectMood(mood, emoji);
+            });
+        });
+    }
 }
 
 function loadDiaryEntry() {
@@ -216,7 +236,16 @@ function getLocalEntries() {
             
             // Skip entries with invalid dates or 'true' content
             if (isValidDate(date) && content !== 'true' && content.trim() !== '') {
-                entries.push({ date, content });
+                const savedMood = localStorage.getItem(`mood_${date}`);
+                let moodData = null;
+                if (savedMood) {
+                    try {
+                        moodData = JSON.parse(savedMood);
+                    } catch (error) {
+                        console.error('Error parsing mood data:', error);
+                    }
+                }
+                entries.push({ date, content, moodData });
             }
         }
     }
@@ -243,6 +272,7 @@ function displayHistoryModal(entries) {
                 entries.map(entry => `
                     <div class="history-entry">
                         <div class="history-entry-date">${formatDisplayDate(entry.date)}</div>
+                        ${entry.moodData ? `<div class="history-entry-mood">${entry.moodData.emoji} ${entry.moodData.mood}</div>` : ''}
                         <div class="history-entry-content">${entry.content.substring(0, 100)}${entry.content.length > 100 ? '...' : ''}</div>
                     </div>
                 `).join('')}
@@ -296,6 +326,72 @@ function formatDisplayDate(dateString) {
         month: 'long', 
         day: 'numeric' 
     });
+}
+
+// Mood Functions
+function selectMood(mood, emoji) {
+    // Save to localStorage
+    const dateKey = formatDateKey(currentDate);
+    localStorage.setItem(`mood_${dateKey}`, JSON.stringify({ mood, emoji }));
+    
+    // Update display
+    currentMood.textContent = mood;
+    moodEmoji.textContent = emoji;
+    
+    // Update button states
+    const emojiButtons = emojiGrid.querySelectorAll('.emoji-btn');
+    emojiButtons.forEach(btn => {
+        btn.classList.remove('selected');
+        if (btn.dataset.mood === mood) {
+            btn.classList.add('selected');
+        }
+    });
+    
+    // Show success message
+    showNotification(`😊 Mood set to: ${mood}`, 'success');
+}
+
+function updateMoodDisplay() {
+    const dateKey = formatDateKey(currentDate);
+    const savedMood = localStorage.getItem(`mood_${dateKey}`);
+    
+    if (savedMood) {
+        try {
+            const moodData = JSON.parse(savedMood);
+            currentMood.textContent = moodData.mood;
+            moodEmoji.textContent = moodData.emoji;
+            
+            // Update button states
+            const emojiButtons = emojiGrid.querySelectorAll('.emoji-btn');
+            emojiButtons.forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.dataset.mood === moodData.mood) {
+                    btn.classList.add('selected');
+                }
+            });
+        } catch (error) {
+            console.error('Error parsing saved mood:', error);
+            resetMoodDisplay();
+        }
+    } else {
+        resetMoodDisplay();
+    }
+}
+
+function resetMoodDisplay() {
+    currentMood.textContent = "How are you feeling today?";
+    moodEmoji.textContent = "😊";
+    
+    // Remove selected state from all buttons
+    const emojiButtons = emojiGrid.querySelectorAll('.emoji-btn');
+    emojiButtons.forEach(btn => {
+        btn.classList.remove('selected');
+    });
+}
+
+function setupMoodSelector() {
+    // Initialize mood display
+    updateMoodDisplay();
 }
 
 // Utility Functions
