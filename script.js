@@ -191,23 +191,21 @@ function navigateDay(direction) {
 }
 
 function updateCurrentDay() {
+    // Format the date in a calendar style
+    const dateString = currentDate.toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
+    
+    currentDaySpan.textContent = dateString;
+    
+    // Disable navigation buttons for future dates (7 days ahead)
     const today = new Date();
     const diffTime = currentDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
-    if (diffDays === 0) {
-        currentDaySpan.textContent = 'Today';
-    } else if (diffDays === 1) {
-        currentDaySpan.textContent = 'Tomorrow';
-    } else if (diffDays === -1) {
-        currentDaySpan.textContent = 'Yesterday';
-    } else if (diffDays > 1) {
-        currentDaySpan.textContent = `In ${diffDays} days`;
-    } else {
-        currentDaySpan.textContent = `${Math.abs(diffDays)} days ago`;
-    }
-    
-    // Disable navigation buttons for future dates
     const maxFutureDays = 7;
     nextDayBtn.disabled = diffDays >= maxFutureDays;
     prevDayBtn.disabled = diffDays <= -365; // Allow 1 year back
