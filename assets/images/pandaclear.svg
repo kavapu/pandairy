@@ -1,0 +1,33 @@
+<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Panda body - clean minimalist design -->
+  <circle cx="30" cy="30" r="25" fill="#f8f9fa" stroke="#6c757d" stroke-width="1.5"/>
+  
+  <!-- Panda ears - smaller and cleaner -->
+  <circle cx="22" cy="18" r="6" fill="#6c757d"/>
+  <circle cx="38" cy="18" r="6" fill="#6c757d"/>
+  
+  <!-- Panda eyes - larger and more expressive -->
+  <circle cx="24" cy="26" r="5" fill="#343a40"/>
+  <circle cx="36" cy="26" r="5" fill="#343a40"/>
+  
+  <!-- Eye highlights -->
+  <circle cx="26" cy="24" r="1.5" fill="white"/>
+  <circle cx="38" cy="24" r="1.5" fill="white"/>
+  
+  <!-- Panda nose - smaller and cleaner -->
+  <ellipse cx="30" cy="32" rx="1.5" ry="0.8" fill="#343a40"/>
+  
+  <!-- Panda mouth - simple smile -->
+  <path d="M 26 35 Q 30 38 34 35" stroke="#343a40" stroke-width="1" fill="none" stroke-linecap="round"/>
+  
+  <!-- Panda arms - smaller and cleaner -->
+  <circle cx="18" cy="35" r="4" fill="#6c757d"/>
+  <circle cx="42" cy="35" r="4" fill="#6c757d"/>
+  
+  <!-- Panda legs - smaller and cleaner -->
+  <circle cx="26" cy="48" r="4" fill="#6c757d"/>
+  <circle cx="34" cy="48" r="4" fill="#6c757d"/>
+  
+  <!-- Optional: Add some subtle details -->
+  <circle cx="30" cy="40" r="1" fill="#dee2e6" opacity="0.6"/>
+</svg>
