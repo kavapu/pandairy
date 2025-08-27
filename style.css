@@ -422,13 +422,13 @@ body::before {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     padding: 20px;
-    font-family: 'Indie Flower', 'Gochi Hand', cursive;
-    font-size: 1.1rem;
+    font-family: 'Bunch Blossoms', 'Indie Flower', 'Gochi Hand', cursive;
+    font-size: 1.2rem;
     color: #2c3e50;
     resize: none;
     outline: none;
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    line-height: 1.6;
+    line-height: 1.8;
     /* Performance optimization */
     will-change: contents;
     contain: layout style;
@@ -970,7 +970,7 @@ body::before {
 .history-entry-content {
     color: #34495e;
     line-height: 1.5;
-    font-family: 'Indie Flower', 'Gochi Hand', cursive;
+    font-family: 'Bunch Blossoms', 'Indie Flower', 'Gochi Hand', cursive;
     font-size: 1rem;
 }
 
