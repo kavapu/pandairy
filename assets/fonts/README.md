@@ -1,8 +1,19 @@
 # Fonts Directory
 
-## Adding Bunch Blossoms Font
+## Current Font Setup
 
-To use the "Bunch Blossoms by Billy Argel Fonts" in your diary entries:
+The diary now uses **Quicksand** as the primary font - a cute, round-shaped, friendly font that's perfect for diary entries!
+
+### Font Stack (in order of preference):
+1. **Quicksand** - Primary cute, round font (Google Fonts)
+2. **Bunch Blossoms** - Custom font (if you add the file)
+3. **Comic Neue** - Cute, friendly alternative (Google Fonts)
+4. **Varela Round** - Round, modern alternative (Google Fonts)
+5. **System sans-serif** - Final fallback
+
+## Adding Bunch Blossoms Font (Optional)
+
+If you want to use the "Bunch Blossoms by Billy Argel Fonts":
 
 1. **Download the font:**
    - Visit the official font website or a trusted font repository
@@ -18,18 +29,18 @@ To use the "Bunch Blossoms by Billy Argel Fonts" in your diary entries:
 
 ## Font Usage
 
-The font is already configured in the CSS and will be used for:
+The fonts are configured in the CSS and will be used for:
 - Diary entry textarea
 - History entry content
 - Any other diary-related text
 
-## Fallback Fonts
+## Font Features
 
-If Bunch Blossoms is not available, the app will fall back to:
-1. Indie Flower (Google Fonts)
-2. Gochi Hand (Google Fonts)
-3. System cursive fonts
+- **Quicksand**: Cute, round, friendly, highly readable
+- **Comic Neue**: Playful and approachable
+- **Varela Round**: Modern and clean with rounded edges
+- **Bunch Blossoms**: Handwritten style (if added)
 
 ## Note
 
-Make sure you have the proper license to use this font in your project.
+The current setup uses Google Fonts which are free and don't require additional licensing.
