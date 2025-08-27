@@ -2,14 +2,15 @@
 
 ## Current Font Setup
 
-The diary now uses **Quicksand** as the primary font - a cute, round-shaped, friendly font that's perfect for diary entries!
+The diary now uses **Cookie** as the primary font - an absolutely adorable handwritten font that's perfect for diary entries! 🍪
 
 ### Font Stack (in order of preference):
-1. **Quicksand** - Primary cute, round font (Google Fonts)
-2. **Bunch Blossoms** - Custom font (if you add the file)
-3. **Comic Neue** - Cute, friendly alternative (Google Fonts)
-4. **Varela Round** - Round, modern alternative (Google Fonts)
-5. **System sans-serif** - Final fallback
+1. **Cookie** - Primary cute, handwritten font (Google Fonts)
+2. **Quicksand** - Cute, round alternative (Google Fonts)
+3. **Bunch Blossoms** - Custom font (if you add the file)
+4. **Comic Neue** - Cute, friendly alternative (Google Fonts)
+5. **Varela Round** - Round, modern alternative (Google Fonts)
+6. **System cursive** - Final fallback
 
 ## Adding Bunch Blossoms Font (Optional)
 
@@ -36,6 +37,7 @@ The fonts are configured in the CSS and will be used for:
 
 ## Font Features
 
+- **Cookie**: Adorable, handwritten, personal, perfect for diaries 🍪
 - **Quicksand**: Cute, round, friendly, highly readable
 - **Comic Neue**: Playful and approachable
 - **Varela Round**: Modern and clean with rounded edges
