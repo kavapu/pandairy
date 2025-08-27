@@ -13,13 +13,22 @@
     <div class="container">
         <!-- Left Column -->
         <div class="left-column">
-            <!-- Date/Time Card -->
-            <div class="card time-card">
-                <h3>📅 Today</h3>
-                <div class="time-display-large">
-                    <div class="current-time" id="liveTime">--:--:--</div>
-                    <div class="current-date" id="liveDate">Loading...</div>
-                    <div class="day-of-week" id="dayOfWeek">Loading...</div>
+            <!-- Photo Album Card -->
+            <div class="card photo-album-card">
+                <h3>📸 Photo of the Day</h3>
+                <div class="photo-container">
+                    <div class="photo-preview" id="photoPreview">
+                        <div class="photo-placeholder">
+                            <span class="photo-icon">📷</span>
+                            <p>No photo yet</p>
+                            <p class="photo-hint">Click to add a photo</p>
+                        </div>
+                    </div>
+                    <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                    <div class="photo-controls">
+                        <button class="photo-btn" id="addPhotoBtn">📷 Add Photo</button>
+                        <button class="photo-btn" id="removePhotoBtn" style="display: none;">🗑️ Remove</button>
+                    </div>
                 </div>
             </div>
 

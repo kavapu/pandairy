@@ -5,8 +5,9 @@
 let currentDate = new Date();
 
 // DOM Elements
-let liveTime, liveDate, dayOfWeek, diaryTextarea, saveBtn, prevDayBtn, nextDayBtn, currentDaySpan, historyBtn, pandaImage;
+let diaryTextarea, saveBtn, prevDayBtn, nextDayBtn, currentDaySpan, historyBtn, pandaImage;
 let currentMood, moodEmoji, emojiGrid;
+let photoPreview, photoInput, addPhotoBtn, removePhotoBtn;
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', function() {
@@ -20,26 +21,21 @@ function initializeApp() {
     initializeDOMElements();
     
     // Setup all features
-    setupLiveClock();
     setupDiary();
+    setupPhotoAlbum();
     updateCurrentDay();
     setupMoodSelector();
     updateMoodDisplay();
     
     // Show welcome message
     setTimeout(() => {
-        showNotification('🐼 Welcome to your Panda Diary! Your entries are saved locally.', 'success');
+        showNotification('🐼 Welcome to your Panda Diary! Your entries and photos are saved locally.', 'success');
     }, 2000);
     
     console.log('Static app initialization complete');
 }
 
 function initializeDOMElements() {
-    // Time elements
-    liveTime = document.getElementById('liveTime');
-    liveDate = document.getElementById('liveDate');
-    dayOfWeek = document.getElementById('dayOfWeek');
-    
     // Diary elements
     diaryTextarea = document.getElementById('diaryTextarea');
     saveBtn = document.getElementById('saveBtn');
@@ -54,52 +50,13 @@ function initializeDOMElements() {
     moodEmoji = document.getElementById('moodEmoji');
     emojiGrid = document.getElementById('emojiGrid');
     
+    // Photo album elements
+    photoPreview = document.getElementById('photoPreview');
+    photoInput = document.getElementById('photoInput');
+    addPhotoBtn = document.getElementById('addPhotoBtn');
+    removePhotoBtn = document.getElementById('removePhotoBtn');
+    
     console.log('DOM Elements initialized');
-}
-
-// Live Clock Functions
-function setupLiveClock() {
-    console.log('Setting up live clock...');
-    
-    // Force initial update
-    updateClock();
-    
-    // Update every second for accurate time display
-    setInterval(updateClock, 1000);
-    
-    console.log('Live clock setup complete');
-}
-
-function updateClock() {
-    const now = new Date();
-    
-    // Update time (every second for accurate display)
-    const timeString = now.toLocaleTimeString('en-US', {
-        hour12: false,
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-    });
-    
-    if (liveTime) {
-        liveTime.textContent = timeString;
-    }
-    
-    // Update date (only if changed - once per day)
-    const dateString = now.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-    if (liveDate && liveDate.textContent !== dateString) {
-        liveDate.textContent = dateString;
-    }
-    
-    // Update day of week (only if changed)
-    const dayString = now.toLocaleDateString('en-US', { weekday: 'long' });
-    if (dayOfWeek && dayOfWeek.textContent !== dayString) {
-        dayOfWeek.textContent = dayString;
-    }
 }
 
 // Diary Functions
@@ -140,6 +97,9 @@ function loadDiaryEntry() {
     // Load from LocalStorage
     const entry = localStorage.getItem(`diary_${dateKey}`);
     diaryTextarea.textContent = entry || '';
+    
+    // Load photo for this date
+    loadPhoto(dateKey);
 }
 
 function saveDiaryEntry() {
@@ -215,6 +175,104 @@ function formatDateKey(date) {
     return date.toISOString().split('T')[0];
 }
 
+// Photo Album Functions
+function setupPhotoAlbum() {
+    // Event listeners
+    addPhotoBtn.addEventListener('click', () => photoInput.click());
+    removePhotoBtn.addEventListener('click', removePhoto);
+    photoPreview.addEventListener('click', () => photoInput.click());
+    photoInput.addEventListener('change', handlePhotoUpload);
+}
+
+function handlePhotoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+        showNotification('Please select an image file! 📸', 'error');
+        return;
+    }
+    
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+        showNotification('Image too large! Please select an image under 5MB.', 'error');
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const dateKey = formatDateKey(currentDate);
+        const imageData = e.target.result;
+        
+        // Save photo to LocalStorage
+        localStorage.setItem(`photo_${dateKey}`, imageData);
+        
+        // Display photo
+        displayPhoto(imageData);
+        
+        // Show success message
+        showNotification('Photo added successfully! 📸', 'success');
+    };
+    
+    reader.readAsDataURL(file);
+}
+
+function displayPhoto(imageData) {
+    // Clear placeholder
+    photoPreview.innerHTML = '';
+    
+    // Create and display image
+    const img = document.createElement('img');
+    img.src = imageData;
+    img.alt = 'Photo of the day';
+    photoPreview.appendChild(img);
+    
+    // Show remove button
+    removePhotoBtn.style.display = 'block';
+    addPhotoBtn.textContent = '📷 Change Photo';
+}
+
+function loadPhoto(dateKey) {
+    const savedPhoto = localStorage.getItem(`photo_${dateKey}`);
+    
+    if (savedPhoto) {
+        displayPhoto(savedPhoto);
+    } else {
+        showPhotoPlaceholder();
+    }
+}
+
+function showPhotoPlaceholder() {
+    photoPreview.innerHTML = `
+        <div class="photo-placeholder">
+            <span class="photo-icon">📷</span>
+            <p>No photo yet</p>
+            <p class="photo-hint">Click to add a photo</p>
+        </div>
+    `;
+    
+    // Hide remove button
+    removePhotoBtn.style.display = 'none';
+    addPhotoBtn.textContent = '📷 Add Photo';
+}
+
+function removePhoto() {
+    const dateKey = formatDateKey(currentDate);
+    
+    // Remove from LocalStorage
+    localStorage.removeItem(`photo_${dateKey}`);
+    
+    // Show placeholder
+    showPhotoPlaceholder();
+    
+    // Clear file input
+    photoInput.value = '';
+    
+    // Show success message
+    showNotification('Photo removed! 📸', 'success');
+}
+
 // History Functions
 function showHistory() {
     console.log('Showing local history...');
@@ -235,6 +293,7 @@ function getLocalEntries() {
             // Skip entries with invalid dates or 'true' content
             if (isValidDate(date) && content !== 'true' && content.trim() !== '') {
                 const savedMood = localStorage.getItem(`mood_${date}`);
+                const savedPhoto = localStorage.getItem(`photo_${date}`);
                 let moodData = null;
                 if (savedMood) {
                     try {
@@ -243,7 +302,7 @@ function getLocalEntries() {
                         console.error('Error parsing mood data:', error);
                     }
                 }
-                entries.push({ date, content, moodData });
+                entries.push({ date, content, moodData, photo: savedPhoto });
             }
         }
     }
@@ -271,6 +330,7 @@ function displayHistoryModal(entries) {
                     <div class="history-entry">
                         <div class="history-entry-date">${formatDisplayDate(entry.date)}</div>
                         ${entry.moodData ? `<div class="history-entry-mood">${entry.moodData.emoji} ${entry.moodData.mood}</div>` : ''}
+                        ${entry.photo ? `<div class="history-entry-photo"><img src="${entry.photo}" alt="Photo of the day" style="width: 100%; max-width: 200px; border-radius: 8px; margin: 10px 0;"></div>` : ''}
                         <div class="history-entry-content">${entry.content.substring(0, 100)}${entry.content.length > 100 ? '...' : ''}</div>
                     </div>
                 `).join('')}
